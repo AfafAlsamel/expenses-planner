@@ -1,3 +1,4 @@
+import 'package:expenses_planner/widegts/chart.dart';
 import 'package:expenses_planner/widegts/new_transaction.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -44,19 +45,29 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _userTransactoins = [
-    Transaction(
-      id: 't1',
-      title: 'new bag',
-      amount: 56.4,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: 't2',
-      title: 'new sunglasses',
-      amount: 46.4,
-      date: DateTime.now(),
-    ),
+    // Transaction(
+    //   id: 't1',
+    //   title: 'new bag',
+    //   amount: 56.4,
+    //   date: DateTime.now(),
+    // ),
+    // Transaction(
+    //   id: 't2',
+    //   title: 'new sunglasses',
+    //   amount: 46.4,
+    //   date: DateTime.now(),
+    // ),
   ];
+
+  List<Transaction> get _recentTransactions {
+    return _userTransactoins.where((tx) {
+      return tx.date.isAfter(
+        DateTime.now().subtract(
+          Duration(days: 7),
+        ),
+      );
+    }).toList();
+  }
 
   void _addNewTransaction(String titleTx, double amountTx) {
     final newTx = Transaction(
@@ -99,14 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              width: double.infinity,
-              child: Card(
-                elevation: 5,
-                color: Colors.blue,
-                child: Text('Chart'),
-              ),
-            ),
+           Chart(_recentTransactions),
             TransactionList(_userTransactoins),
           ],
         ),
